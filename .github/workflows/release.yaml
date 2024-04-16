@@ -12,9 +12,7 @@ jobs:
     name: Release new version
 
     runs-on: ubuntu-latest
-    container: node:18.13-bullseye-slim
-
-    needs: test
+    container: node:18.19.1-bullseye-slim
 
     permissions:
       contents: write
@@ -31,16 +29,16 @@ jobs:
 
       - uses: actions/checkout@v4
 
+      - run: chown -R node:node .
+
       - name: Mark the working directory as safe
         run: git config --global --add safe.directory ${GITHUB_WORKSPACE}
 
       - name: Build
-        run: |
-          npm install
-          npm run build
+        run: su node -c 'npm install && npm run build'
 
       - name: Prune dev dependencies
-        run: npm install --only=prod
+        run: su node -c 'npm install --only=prod' && export HUSKY=0
 
       - name: Release
         id: semantic
