@@ -10,7 +10,7 @@ function run_probe() {
 function try_update() {
 	echo "Checking for the latest version"
 
-	response=$(curl -XGET -Lf -sS "https://api.github.com/repos/jsdelivr/globalping-probe/releases/latest")
+	response=$(curl -XGET -Lf -sS "https://api.github.com/repos/MartinKolarik/globalping-probe/releases/latest")
 
 	if [ $? != 0 ]; then
 		echo "Failed to fetch the latest version data"
