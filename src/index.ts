@@ -37,7 +37,7 @@ function updateNode () {
 	}
 
 	if (os.totalmem() < MIN_NODE_UPDATE_MEMORY) {
-		console.log(`Total system memory ${os.totalmem()} below the required threshold. Not updating.`);
+		console.log(`Total system memory ${os.totalmem()} below the required threshold. Not updating. x`);
 		return;
 	}
 
