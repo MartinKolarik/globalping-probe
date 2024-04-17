@@ -29,9 +29,6 @@ jobs:
       - name: Install git :)
         run: apt update && apt install -y git
 
-      - name: Change directory ownership to the node user
-        run: chown -R node:node .
-
       - uses: actions/checkout@v4
 
       - name: Change directory ownership to the node user
