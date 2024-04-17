@@ -10,15 +10,15 @@ function run_probe() {
 function try_update() {
 	echo "Checking for the latest version"
 
-	response=$(curl -XGET -Lf -sS "https://api.github.com/repos/jsdelivr/globalping-probe/releases/latest")
+	response=$(curl -XGET -Lf -sS "https://data.jsdelivr.com/v1/packages/gh/jsdelivr/globalping-probe/resolved")
 
 	if [ $? != 0 ]; then
 		echo "Failed to fetch the latest version data"
 		return
 	fi
 
-	latestVersion=$(jq -r ".tag_name" <<<"${response}" | sed 's/v//')
-	latestBundle=$(jq -r ".assets[] .browser_download_url" <<<"${response}")
+	latestVersion=$(jq -r ".version" <<<"${response}" | sed 's/v//')
+	latestBundle="https://cdn.jsdelivr.net/globalping-probe/v$latestVersion/globalping-probe.bundle.tar.gz"
 
 	currentVersion=$(jq -r ".version" "/app/package.json")
 
