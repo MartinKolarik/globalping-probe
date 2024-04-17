@@ -8,7 +8,7 @@ function run_probe() {
 }
 
 function try_update() {
-	echo "Checking for the latest version 1"
+	echo "Checking for the latest version 2"
 
 	response=$(curl -XGET -Lf -sS "https://api.github.com/repos/MartinKolarik/globalping-probe/releases/latest")
 
