@@ -8,7 +8,7 @@ function run_probe() {
 }
 
 function try_update() {
-	echo "Checking for the latest version 4"
+	echo "Checking for the latest version 5"
 
 	response=$(curl -XGET -Lf -sS "https://data.jsdelivr.com/v1/packages/gh/MartinKolarik/globalping-probe/resolved")
 
