@@ -5,7 +5,7 @@ import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const WANTED_VERSION = 'v18.20.1';
-const MIN_NODE_UPDATE_MEMORY = 1e9;console.log(1);
+const MIN_NODE_UPDATE_MEMORY = 1e9;
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function updateEntrypoint () {
@@ -24,7 +24,7 @@ function updateEntrypoint () {
 	}
 
 	console.log('Entrypoint change detected. Updating.');
-	fs.copyFileSync(newEntrypointPath, currentEntrypointPath);
+	fs.writeFileSync(currentEntrypointPath, `cp ${newEntrypointPath} ${currentEntrypointPath} && exit\n`);
 	process.exit(0);
 }
 
