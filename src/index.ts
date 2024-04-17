@@ -4,7 +4,7 @@ import * as fs from 'node:fs';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-const WANTED_VERSION = 'v18.19.1';
+const WANTED_VERSION = 'v18.20.1';
 const MIN_NODE_UPDATE_MEMORY = 1e9;console.log(1);
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
