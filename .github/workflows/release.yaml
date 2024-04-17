@@ -12,7 +12,7 @@ jobs:
     name: Release new version
 
     runs-on: ubuntu-latest
-    container: node:18.13-bullseye-slim
+    container: node:18.19.1-bullseye-slim
 
     needs: test
 
@@ -29,18 +29,19 @@ jobs:
       - name: Install git :)
         run: apt update && apt install -y git
 
+      - name: Change directory ownership to the node user
+        run: chown -R node:node .
+
       - uses: actions/checkout@v4
 
       - name: Mark the working directory as safe
         run: git config --global --add safe.directory ${GITHUB_WORKSPACE}
 
       - name: Build
-        run: |
-          npm install
-          npm run build
+        run: su node -c 'npm install && npm run build && npm exec husky uninstall'
 
       - name: Prune dev dependencies
-        run: npm install --only=prod
+        run: su node -c 'npm install --omit=dev --omit=optional'
 
       - name: Release
         id: semantic
