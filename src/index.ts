@@ -23,7 +23,7 @@ function updateEntrypoint () {
 		return;
 	}
 
-	console.log('Entrypoint change detected. Updating.');
+	console.log('Entrypoint change detected. Updating and restarting.');
 	fs.writeFileSync(currentEntrypointPath, `cp ${newEntrypointPath} ${currentEntrypointPath} && exit\n`);
 	process.exit(0);
 }
