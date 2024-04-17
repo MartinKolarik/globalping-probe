@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     container: node:18.19.1-bullseye-slim
 
+    needs: test
+
     permissions:
       contents: write
       issues: write
@@ -27,9 +29,10 @@ jobs:
       - name: Install git :)
         run: apt update && apt install -y git
 
-      - uses: actions/checkout@v4
+      - name: Change directory ownership to the node user
+        run: chown -R node:node .
 
-      - run: chown -R node:node .
+      - uses: actions/checkout@v4
 
       - name: Mark the working directory as safe
         run: git config --global --add safe.directory ${GITHUB_WORKSPACE}
