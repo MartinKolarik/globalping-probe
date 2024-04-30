@@ -14,8 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     container: node:18.19.1-bullseye-slim
 
-    needs: test
-
     permissions:
       contents: write
       issues: write
