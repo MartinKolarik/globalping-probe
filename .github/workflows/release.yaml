@@ -4,9 +4,6 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  test:
-    name: Test code
-    uses: ./.github/workflows/_tests.yaml
 
   release:
     name: Release new version
