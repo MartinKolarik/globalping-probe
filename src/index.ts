@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import { isV1HardwareDevice } from './lib/util.js';
 
-const WANTED_VERSION = 'v18.20.0';
+const WANTED_VERSION = 'v18.20.1';
 const MIN_NODE_UPDATE_MEMORY = 1e9;
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
