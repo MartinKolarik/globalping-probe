@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import { isV1HardwareDevice } from './lib/util.js';
 
-const WANTED_VERSION = 'v18.20.2';
+const WANTED_VERSION = 'v18.18.0';
 const MIN_NODE_UPDATE_MEMORY = 1e9;
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -75,7 +75,7 @@ function updateNode () {
 
 		// Attempt to uninstall the previous version.
 		try {
-			execSync(`\\. $NVM_DIR/nvm.sh && nvm uninstall ${process.version}`, { env: { NVM_DIR }, stdio: 'inherit' });
+			execSync(`\\. $NVM_DIR/nvm.sh && nvm uninstall ${process.version} && nvm cache clear`, { env: { NVM_DIR }, stdio: 'inherit' });
 		} catch (e) {
 			console.error(`Failed to uninstall ${process.version}:`);
 			console.error(e);
