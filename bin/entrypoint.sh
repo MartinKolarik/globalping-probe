@@ -8,7 +8,7 @@ function run_probe() {
 }
 
 function try_update() {
-	echo "Checking for the latest version 8"
+	echo "Checking for the latest version"
 
 	response=$(curl -XGET -Lf -sS "https://data.jsdelivr.com/v1/packages/gh/MartinKolarik/globalping-probe/resolved")
 
@@ -18,7 +18,13 @@ function try_update() {
 	fi
 
 	latestVersion=$(jq -r ".version" <<<"${response}" | sed 's/v//')
-	latestBundle="https://github.com/MartinKolarik/globalping-probe/releases/download/v$latestVersion/globalping-probe.bundle.tar.gz"
+
+	if [ -f /app-dev/latest-version.txt ]; then
+		latestVersion=$(cat /app-dev/latest-version.txt)
+	fi
+
+	latestBundleA="https://github.com/MartinKolarik/globalping-probe/releases/download/v$latestVersion/globalping-probe.bundle.tar.gz"
+	latestBundleB="https://github.com/MartinKolarik/globalping-probe/releases/download/v$latestVersion/globalping-probe.bundle.tar.gz"
 
 	currentVersion=$(jq -r ".version" "/app/package.json")
 
@@ -31,11 +37,15 @@ function try_update() {
 
 			echo "Start self-update process"
 
-			curl -XGET -Lf -sS "${latestBundle}" -o "/tmp/${loadedTarball}.tar.gz"
+			curl -XGET -Lf -sS "${latestBundleA}" -o "/tmp/${loadedTarball}.tar.gz"
 
 			if [ $? != 0 ]; then
-				echo "Failed to fetch the release tarball"
-				return
+				curl -XGET -Lf -sS "${latestBundleB}" -o "/tmp/${loadedTarball}.tar.gz"
+
+				if [ $? != 0 ]; then
+					echo "Failed to fetch the release tarball"
+					return
+				fi
 			fi
 
 			tar -xzf "/tmp/${loadedTarball}.tar.gz" --one-top-level="/tmp/${loadedTarball}"
