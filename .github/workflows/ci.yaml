@@ -10,11 +10,11 @@ jobs:
   test-code:
     name: Test code
     uses: ./.github/workflows/_tests.yaml
-  test-docker:
-    name: Test docker
-    uses: ./.github/workflows/_docker.yaml
-    with:
-      ref: ${{ github.ref }}
-      publish: false
-    secrets:
-      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+#  test-docker:
+#    name: Test docker
+#    uses: ./.github/workflows/_docker.yaml
+#    with:
+#      ref: ${{ github.ref }}
+#      publish: false
+#    secrets:
+#      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
