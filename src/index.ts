@@ -45,19 +45,20 @@ function updateNode () {
 	}
 
 	try {
-		const PROBE_MEMORY = os.totalmem();
-		const PROBE_DISK_SPACE_MB = parseInt(execSync('df --block-size=MB --output=avail / | tail -1').toString());
 		const IS_HW_PROBE = process.env['GP_HOST_HW'] || looksLikeV1HardwareDevice();
 
-		if (IS_HW_PROBE || PROBE_MEMORY < MIN_NODE_UPDATE_MEMORY || PROBE_DISK_SPACE_MB < MIN_NODE_UPDATE_DISK_SPACE_MB) {
+		if (IS_HW_PROBE) {
+			console.log(`Hardware probe detected. Not updating.`);
+			logUpdateFirmwareMessage();
+			return;
+		}
+
+		const PROBE_MEMORY = os.totalmem();
+		const PROBE_DISK_SPACE_MB = parseInt(execSync('df --block-size=MB --output=avail / | tail -1').toString());
+
+		if (PROBE_MEMORY < MIN_NODE_UPDATE_MEMORY || PROBE_DISK_SPACE_MB < MIN_NODE_UPDATE_DISK_SPACE_MB) {
 			console.log(`Total system memory (${PROBE_MEMORY}) or disk space (${PROBE_DISK_SPACE_MB}MB} below the required threshold. Not updating.`);
-
-			if (IS_HW_PROBE) {
-				logUpdateFirmwareMessage();
-			} else {
-				logUpdateContainerMessage();
-			}
-
+			logUpdateContainerMessage();
 			return;
 		}
 
