@@ -4,7 +4,7 @@ import * as fs from 'node:fs';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-import { isV1HardwareDevice } from './lib/util.js';
+import { looksLikeV1HardwareDevice } from './lib/util.js';
 
 const WANTED_VERSION = 'v18.18.0';
 const MIN_NODE_UPDATE_MEMORY = 400 * 1e6;
@@ -47,11 +47,12 @@ function updateNode () {
 	try {
 		const PROBE_MEMORY = os.totalmem();
 		const PROBE_DISK_SPACE_MB = parseInt(execSync('df --block-size=MB --output=avail / | tail -1').toString());
+		const IS_HW_PROBE = process.env['GP_HOST_HW'] || looksLikeV1HardwareDevice();
 
-		if (PROBE_MEMORY < MIN_NODE_UPDATE_MEMORY || PROBE_DISK_SPACE_MB < MIN_NODE_UPDATE_DISK_SPACE_MB) {
+		if (IS_HW_PROBE || PROBE_MEMORY < MIN_NODE_UPDATE_MEMORY || PROBE_DISK_SPACE_MB < MIN_NODE_UPDATE_DISK_SPACE_MB) {
 			console.log(`Total system memory (${PROBE_MEMORY}) or disk space (${PROBE_DISK_SPACE_MB}MB} below the required threshold. Not updating.`);
 
-			if (isV1HardwareDevice() || process.env['GP_HOST_HW']) {
+			if (IS_HW_PROBE) {
 				logUpdateFirmwareMessage();
 			} else {
 				logUpdateContainerMessage();
@@ -113,7 +114,7 @@ function logUpdateContainerMessage () {
 Current probe container is out of date and we couldn't update it automatically.
 Please either:
 - update it manually: https://github.com/jsdelivr/globalping-probe#optional-container-update
-- increase container RAM to >1GB
+- increase the available RAM to >= 500MB and disk size to >= 1GB
 	`);
 
 	setTimeout(logUpdateContainerMessage, 10 * 60 * 1000);
