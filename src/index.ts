@@ -63,10 +63,9 @@ function updateNode () {
 		execSync(`cp -r ${NODE_MODULES_NVM} /`);
 
 		// Install the requested version.
-		execSync(`\\. $NVM_DIR/nvm.sh && nvm install ${WANTED_VERSION}`, { env: { NVM_DIR }, stdio: 'inherit' });
-		execSync(`\\. $NVM_DIR/nvm.sh && nvm alias default ${WANTED_VERSION}`, { env: { NVM_DIR }, stdio: 'inherit' });
+		execSync(`\\. $NVM_DIR/nvm.sh && nvm install ${WANTED_VERSION} && nvm alias default ${WANTED_VERSION}`, { env: { NVM_DIR }, stdio: 'inherit' });
 
-		// Symlink the version to make the change permanent.
+		// Symlink the new version to the default location to make the change permanent.
 		const newNodePath = execSync(`\\. $NVM_DIR/nvm.sh && nvm which ${WANTED_VERSION}`, { env: { NVM_DIR } }).toString().trim();
 		const oldNodePath = execSync('which node').toString().trim();
 
