@@ -7,7 +7,8 @@ import { fileURLToPath } from 'node:url';
 import { isV1HardwareDevice } from './lib/util.js';
 
 const WANTED_VERSION = 'v18.18.0';
-const MIN_NODE_UPDATE_MEMORY = 1e9;
+const MIN_NODE_UPDATE_MEMORY = 400 * 1e6;
+const MIN_NODE_UPDATE_DISK_SPACE_MB = 1000;
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function updateEntrypoint () {
@@ -43,19 +44,22 @@ function updateNode () {
 		return;
 	}
 
-	if (os.totalmem() < MIN_NODE_UPDATE_MEMORY) {
-		console.log(`Total system memory ${os.totalmem()} below the required threshold. Not updating.`);
+	try {
+		const PROBE_MEMORY = os.totalmem();
+		const PROBE_DISK_SPACE_MB = parseInt(execSync('df --block-size=MB --output=avail / | tail -1').toString());
 
-		if (isV1HardwareDevice() || process.env['GP_HOST_HW']) {
-			logUpdateFirmwareMessage();
-		} else {
-			logUpdateContainerMessage();
+		if (PROBE_MEMORY < MIN_NODE_UPDATE_MEMORY || PROBE_DISK_SPACE_MB < MIN_NODE_UPDATE_DISK_SPACE_MB) {
+			console.log(`Total system memory (${PROBE_MEMORY}) or disk space (${PROBE_DISK_SPACE_MB}MB} below the required threshold. Not updating.`);
+
+			if (isV1HardwareDevice() || process.env['GP_HOST_HW']) {
+				logUpdateFirmwareMessage();
+			} else {
+				logUpdateContainerMessage();
+			}
+
+			return;
 		}
 
-		return;
-	}
-
-	try {
 		const NODE_MODULES_NVM = '/app/node_modules/nvm';
 		const NVM_DIR = '/nvm';
 
