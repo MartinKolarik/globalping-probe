@@ -26,7 +26,7 @@ import { VERSION } from './constants.js';
 // Set the expected variables on HW probes with older firmware
 // https://github.com/jsdelivr/globalping-hwprobe/issues/27
 // https://github.com/jsdelivr/globalping-probe/issues/206
-if (!looksLikeV1HardwareDevice()) {
+if (looksLikeV1HardwareDevice()) {
 	process.env['GP_HOST_HW'] = 'true';
 	process.env['GP_HOST_DEVICE'] = 'v1';
 }
