@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import { looksLikeV1HardwareDevice } from './lib/util.js';
 
-const WANTED_VERSION = 'v18.19.1';
+const WANTED_VERSION = 'v18.19.0';
 const MIN_NODE_UPDATE_MEMORY = 400 * 1e6;
 const MIN_NODE_UPDATE_DISK_SPACE_MB = 1000;
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -69,7 +69,7 @@ function updateNode () {
 		execSync(`cp -r ${NODE_MODULES_NVM} /`);
 
 		// Install the requested version.
-		execSync(`\\. $NVM_DIR/nvm.sh && nvm install ${WANTED_VERSION} && nvm alias default ${WANTED_VERSION}`, { env: { NVM_DIR }, stdio: 'inherit' });
+		execSync(`\\. $NVM_DIR/nvm.sh && nvm install -b ${WANTED_VERSION} && nvm alias default ${WANTED_VERSION}`, { env: { NVM_DIR }, stdio: 'inherit' });
 
 		// Symlink the new version to the default location to make the change permanent.
 		const newNodePath = execSync(`\\. $NVM_DIR/nvm.sh && nvm which ${WANTED_VERSION}`, { env: { NVM_DIR } }).toString().trim();
